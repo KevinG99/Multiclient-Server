@@ -13,8 +13,9 @@
 
 #include <netinet/in.h>
 
+
 #define ENDLOSSCHLEIFE 1
-#define PORT 4711
+#define PORT 5678
 
 void Signalhandler(int sig);
 
@@ -25,11 +26,12 @@ char input[BUFSIZE]; // Daten vom Client an den Server
 int bytes_read; // Anzahl der Bytes, die der Client geschickt hat
 int erstelleSocket();
 
-void Bedingung(char *eingabehalter1,
-               char *eingabehalter2,
-               char *eingabehalter3,
-               int cfd, int semID1, int semID2, int shmID);
+void conditions(char *eingabehalter1,
+                char *eingabehalter2,
+                char *eingabehalter3,
+                int cfd, int semID1, int shmID);
 
-unsigned short Null[10], Eins[10];
+unsigned short marker[2], marker2[2];
+
 
 #endif //BS_CODE_BESSER_MAIN_H
