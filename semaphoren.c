@@ -3,7 +3,7 @@
 #include <unistd.h>
 
 int semGET() {
-    int sem_id = semget (IPC_PRIVATE, 100, IPC_CREAT | IPC_EXCL | 0600);
+    int sem_id = semget (IPC_PRIVATE, 1, IPC_CREAT | IPC_EXCL | 0600);
     if (sem_id == -1) {
         fprintf(stderr, "Fehler beim Erstellen des Semaphores 1\n");
     }

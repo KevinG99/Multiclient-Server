@@ -1,6 +1,6 @@
 #include "shmmemory.h"
 
-#define SHMSIZE 4096
+#define SHMSIZE 2056
 
 int shmem() {
     int shmid = shmget(IPC_PRIVATE, SHMSIZE, IPC_CREAT | 0600);

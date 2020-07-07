@@ -1,6 +1,6 @@
 #include "main.h"
 
-void Signalhandler(int sig) {
+void signalhandler(int sig) {
     if (sig != SIGINT) {
         return;
     }

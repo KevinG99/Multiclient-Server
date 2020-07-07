@@ -1,0 +1,3 @@
+/mnt/e/BS_CODE_besser/test_build/CMakeFiles/rebuild_cache.dir
+/mnt/e/BS_CODE_besser/test_build/CMakeFiles/BS_CODE_besser.dir
+/mnt/e/BS_CODE_besser/test_build/CMakeFiles/edit_cache.dir

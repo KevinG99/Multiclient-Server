@@ -2,10 +2,10 @@
 #include <stdio.h>
 
 char ausgabe[9192];
-int put(char *key, char *value, int cfd, int shmID) {
-    kv = (struct key_value *) shmat(shmID, NULL, 0);
-    printf("1----\n");
+
+int put(char *key, char *value, int cfd, int msgID) {
     int non = 0;
+
     bzero(ausgabe, sizeof(ausgabe));
     for (int j = 0; j < kv->number; j++) {
         if (strcmp(kv[j].key, key) == 0) {
@@ -13,26 +13,32 @@ int put(char *key, char *value, int cfd, int shmID) {
             strcpy(kv[j].value, value);
             sprintf(ausgabe, "PUT:%s:%s\n", kv[j].key, kv[j].value);
             write(cfd, ausgabe, strlen(ausgabe));
+            for (int i = 0; i < sharedSUB->counter; i++) {
+                if (strcmp(kv[j].key, sharedSUB[i].key) == 0){
+                    mess.mtype = sharedSUB[i].pid;
+                    strcpy(mess.mtext, sharedSUB[i].key);
+                    sharedSUB->haschanged = 1;
+                    strcpy(sharedSUB->lastoperation, "PUT");
+                    strcpy(sharedSUB->lastkey, key);
+                    msgsnd(msgID, &mess, sizeof(mess), 0);
+                }
+            }
             non = 1;
-            printf("2----\n");
             break;
         }
     }
-    printf("3----\n");
     if (non == 0) {
         strcpy(kv[kv->number].key, key);
         strcpy(kv[kv->number].value, value);
         sprintf(ausgabe, "PUT:%s:%s\n", kv[kv->number].key, kv[kv->number].value);
         write(cfd, ausgabe, strlen(ausgabe));
         kv->number += 1;
-        printf("4----\n");
     }
     return 0;
 }
 
 
-int get(char *key, int cfd, int shmID) {
-    kv = (struct key_value *) shmat(shmID, NULL, 0);
+int get(char *key, int cfd) {
     int non = 0;
     bzero(ausgabe, sizeof(ausgabe));
     for (int j = 0; j < kv->number; j++) {
@@ -50,8 +56,7 @@ int get(char *key, int cfd, int shmID) {
     return 0;
 }
 
-int del(char *key, int cfd, int shmID) {
-    kv = (struct key_value *) shmat(shmID, NULL, 0);
+int del(char *key, int cfd, int msgID) {
     int non = 0;
     bzero(ausgabe, sizeof(ausgabe));
     for (int j = 0; j < kv->number; j++) {
@@ -60,6 +65,16 @@ int del(char *key, int cfd, int shmID) {
             bzero(kv[j].key, sizeof(kv[j].key));
             sprintf(ausgabe, "DEL:%s:key_deleted\n", key);
             write(cfd, ausgabe, strlen(ausgabe));
+            for (int i = 0; i < sharedSUB->counter; i++) {
+                if (strcmp(key, sharedSUB[i].key) == 0){
+                    mess.mtype = sharedSUB[i].pid;
+                    strcpy(mess.mtext, sharedSUB[i].key);
+                    sharedSUB->haschanged = 1;
+                    strcpy(sharedSUB->lastoperation, "DEL");
+                    strcpy(sharedSUB->lastkey, key);
+                    msgsnd(msgID, &mess, sizeof(mess), 0);
+                }
+            }
             non = 1;
             break;
         }
@@ -72,8 +87,7 @@ int del(char *key, int cfd, int shmID) {
 }
 
 
-int keyvaluestore(int cfd, int shmID) {
-    kv = (struct key_value *) shmat(shmID, NULL, 0);
+int keyvaluestore(int cfd) {
     bzero(ausgabe, sizeof(ausgabe));
     if (kv->number >= 0) {
         for (int i = 0; i < kv->number; i++) {
@@ -86,5 +100,6 @@ int keyvaluestore(int cfd, int shmID) {
     }
     return 0;
 }
+
 
 

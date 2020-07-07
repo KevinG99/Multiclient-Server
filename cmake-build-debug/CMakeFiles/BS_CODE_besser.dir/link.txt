@@ -1,0 +1,1 @@
+/usr/bin/cc -g   CMakeFiles/BS_CODE_besser.dir/main.c.o CMakeFiles/BS_CODE_besser.dir/shmmemory.c.o CMakeFiles/BS_CODE_besser.dir/shmDatenhaltung.c.o CMakeFiles/BS_CODE_besser.dir/semaphoren.c.o CMakeFiles/BS_CODE_besser.dir/socket_erstellen.c.o CMakeFiles/BS_CODE_besser.dir/signal_handler.c.o CMakeFiles/BS_CODE_besser.dir/pubsub.c.o  -o BS_CODE_besser 
